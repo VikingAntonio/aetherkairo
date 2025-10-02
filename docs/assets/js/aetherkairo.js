@@ -5,14 +5,6 @@ class VikingDev extends HTMLElement {
     // Crear Shadow DOM
     const shadow = this.attachShadow({ mode: "open" });
 
-    // Inyectar la librería de model-viewer si aún no está cargada
-    if (!window.customElements.get("model-viewer")) {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = "https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js";
-      document.head.appendChild(script);
-    }
-
     // HTML del componente
     shadow.innerHTML = `
       <style>
@@ -25,6 +17,7 @@ class VikingDev extends HTMLElement {
           border-radius: 12px;
           overflow: hidden;
           box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+          background: #111;
         }
 
         model-viewer {
@@ -46,7 +39,11 @@ class VikingDev extends HTMLElement {
 }
 
 // Registrar la etiqueta <vikingdev>
-customElements.define("vikingdev", VikingDev);
+if (!customElements.get("vikingdev")) {
+  customElements.define("vikingdev", VikingDev);
+}
+
+
 
 
 
