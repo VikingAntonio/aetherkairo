@@ -1,41 +1,53 @@
 class VikingDev extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        // Tomar atributos
-        const src = this.getAttribute('src') || 'https://vikingantonio.github.io/aetherkairo/assets/scene.gltf';
-        const poster = this.getAttribute('poster') || 'https://vikingantonio.github.io/aetherkairo/assets/img/caffe22.png';
-        const bg = this.getAttribute('background') || 'https://vikingantonio.github.io/aetherkairo/assets/img/bgtaza3.png';
-        const width = this.getAttribute('width') || '40%';
-        const height = this.getAttribute('height') || '500px';
+    // Crear Shadow DOM
+    const shadow = this.attachShadow({ mode: "open" });
 
-        // Crear <model-viewer> en Light DOM
-        const mv = document.createElement('model-viewer');
-        mv.setAttribute('src', src);
-        mv.setAttribute('poster', poster);
-        mv.setAttribute('shadow-intensity', '2');
-        mv.setAttribute('camera-controls', '');
-        mv.setAttribute('camera-orbit', '360deg -360deg 1.5m');
-        mv.setAttribute('auto-rotate', '');
-        mv.setAttribute('alt', 'element3D');
-        mv.setAttribute('exposure', '1');
-        mv.setAttribute('environment-image', 'neutral');
-        mv.style.width = width;
-        mv.style.height = height;
-        mv.style.background = `url(${bg})`;
-        mv.style.backgroundPosition = 'bottom';
-        mv.style.backgroundSize = 'cover';
-        mv.style.backgroundRepeat = 'no-repeat';
-        mv.style.display = 'block';
-        mv.style.margin = 'auto';
-
-        // Limpiar contenido previo y añadir el model-viewer
-        this.innerHTML = '';
-        this.appendChild(mv);
+    // Inyectar la librería de model-viewer si aún no está cargada
+    if (!window.customElements.get("model-viewer")) {
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = "https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js";
+      document.head.appendChild(script);
     }
+
+    // HTML del componente
+    shadow.innerHTML = `
+      <style>
+        :host {
+          display: block;
+          width: 100%;
+          max-width: 600px;
+          margin: auto;
+          border: 2px solid #444;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        model-viewer {
+          width: 100%;
+          height: 400px;
+          background: #111;
+        }
+      </style>
+
+      <model-viewer
+        src="https://vikingantonio.github.io/aetherkairo/assets/scene.gltf"
+        alt="cafe"
+        camera-controls
+        auto-rotate
+        ar>
+      </model-viewer>
+    `;
+  }
 }
 
-customElements.define('vikingdev', VikingDev);
+// Registrar la etiqueta <vikingdev>
+customElements.define("vikingdev", VikingDev);
+
 
 
 
